@@ -1,7 +1,7 @@
 # UTESaleApp
 <p><strong>Ứng dụng demo sử dụng Python Flask</strong></p>
 <p><strong>Công nghệ sử dụng: Python Flask + SqlAlchemy tương tác MySQL</strong></p>
-<p>Các bước chạy project</p>
+<p><strong>Các bước chạy project</strong></p>
 <ol>
   <li>Clone project</li>
   <li>Tạo môi trường ảo (nếu chưa có): virtualenv venv</li>
