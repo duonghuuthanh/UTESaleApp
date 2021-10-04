@@ -20,10 +20,14 @@
       </li>
       {% endfor %}
 
+      <li class="nav-item">
+        <a class="nav-link text-danger" href="/cart">Gio hang <span class="badge badge-info" id="cartCounter">0</span></a>
+      </li>
     </ul>
-    <form class="form-inline" action="/">
-      <input class="form-control mr-sm-2" type="text" name="kw" placeholder="Nhap tu khoa...">
-      <button class="btn btn-success" type="submit">Tim</button>
-    </form>
   </div>
+
+  <form class="form-inline" action="/">
+    <input class="form-control mr-sm-2" name="kw" type="text" placeholder="Nhap tu khoa...">
+    <button class="btn btn-success" type="submit">Tim</button>
+  </form>
 </nav>
