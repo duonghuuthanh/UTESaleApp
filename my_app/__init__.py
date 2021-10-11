@@ -12,3 +12,5 @@ app.config["PAGE_SIZE"] = 6
 db = SQLAlchemy(app=app)
 admin = Admin(app=app, name="UTE SHOP", template_mode="bootstrap4")
 my_login = LoginManager(app=app)
+
+CART_KEY = "cart"
