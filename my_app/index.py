@@ -1,12 +1,13 @@
 import math
-
-from flask import render_template, request, session, jsonify
+from flask import render_template, request, session, jsonify, redirect
 from my_app import app, my_login, CART_KEY
 from my_app.models import User
-from flask_login import login_user
+from flask_login import login_user, logout_user
 import hashlib
 from admin import *
 import utils
+import cloudinary
+import cloudinary.uploader
 
 
 @app.route("/")
@@ -39,6 +40,31 @@ def login_exe():
         login_user(user)
 
     return redirect("/admin")
+
+
+@app.route("/user-login", methods=['get', 'post'])
+def normal_user_login():
+    err_msg = ""
+    if request.method == 'POST':
+        username = request.form.get("username")
+        password = request.form.get("password")
+        password = str(hashlib.md5(password.encode("utf-8")).digest())
+        user = User.query.filter(User.username == username,
+                                 User.password == password).first()
+        if user:  # dang nhap thanh cong
+            login_user(user)
+            return redirect(request.args.get("next", "/"))
+        else:
+            err_msg = "Username hoac password khong chinh xac!"
+
+    return render_template("login_user.html", err_msg=err_msg)
+
+
+@app.route("/user-logout")
+def normal_user_logout():
+    logout_user()
+
+    return redirect("/user-login")
 
 
 @app.route("/api/add-item-cart", methods=['post'])
@@ -113,9 +139,54 @@ def delete_cart_item(product_id):
     })
 
 
+@app.route('/api/pay', methods=['post'])
+def pay():
+    cart = session.get(CART_KEY)
+    if cart:
+        if utils.add_receipt(cart):
+            del session[CART_KEY]
+
+            return jsonify({
+                "error_code": 200
+            })
+
+    return jsonify({
+        "error_code": 404
+    })
+
+
 @app.route("/cart")
 def cart():
     return render_template('cart.html')
+
+
+@app.route("/register", methods=['get', 'post'])
+def register():
+    err_msg = ""
+    if request.method == 'POST':
+        try:
+            password = request.form["password"]
+            confirm_password = request.form['confirm-password']
+            if password.strip() == confirm_password.strip():
+                avatar = request.files['avatar']
+
+                data = request.form.copy()
+                del data['confirm-password']
+
+                if avatar:
+                    info = cloudinary.uploader.upload(avatar)
+                    data['avatar'] = info['secure_url']
+
+                if utils.add_user(**data):
+                    return redirect("/user-login")
+                else:
+                    err_msg = "Du lieu dau vao khong hop le!"
+            else:
+                err_msg = "Mat khau khong khop!"
+        except:
+            err_msg = "He thong dang co loi! Vui long quay lai sau!"
+
+    return render_template('register.html', err_msg=err_msg)
 
 
 @app.context_processor

@@ -6,7 +6,10 @@
 <h1 class="text-danger">WELCOME {{ current_user.name }} TO OUR WEBSITE!!!</h1>
 <p>This is a demo application!!!</p>
 {% else %}
+    <h1 class="text-center text-danger">DANG NHAP</h1>
+    <form action="/login" method="post">
     {% include 'layout/login.html' %}
+    </form>
 {% endif %}
 
 {% endblock %}

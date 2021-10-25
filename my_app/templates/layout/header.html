@@ -20,6 +20,27 @@
       </li>
       {% endfor %}
 
+      {% if current_user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link text-danger" href="/">
+          {% if current_user.avatar %}
+          <img src="{{ current_user.avatar }}" width="30" class="rounded-circle" />
+          {% endif %}
+          {{ current_user.username }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/user-logout">Dang xuat</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link text-info" href="/user-login">Dang nhap</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-success" href="/register">Dang ky</a>
+      </li>
+      {% endif %}
+
       <li class="nav-item">
         <a class="nav-link text-danger" href="/cart">Gio hang <span class="badge badge-info" id="cartCounter">{{cart_stats.total_quantity}}</span></a>
       </li>

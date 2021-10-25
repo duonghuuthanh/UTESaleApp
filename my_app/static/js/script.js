@@ -81,3 +81,17 @@ function deleteCartItem(productId) {
         })
     }
 }
+
+function pay() {
+    if (confirm("Ban chac chan thanh toan khong?") == true)
+        fetch("/api/pay", {
+            method: 'post'
+        }).then(function(res) {
+            return res.json()
+        }).then(function(data) {
+            if (data.error_code == 200)
+                location.reload()
+            else
+                alert("THANH TOAN DANG CO LOI!!! VUI LONG THUC HIEN SAU!")
+        })
+}

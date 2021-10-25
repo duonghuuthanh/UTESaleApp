@@ -1,0 +1,56 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}DANG KY NGUOI DUNG{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-danger">DANG KY NGUOI DUNG</h1>
+
+    {% if err_msg %}
+    <div class="alert alert-danger">
+        {{ err_msg }}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text"
+                   name="name"
+                   class="form-control"
+                   placeholder="Nhap name..."
+                   id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text"
+                   name="username"
+                   class="form-control"
+                   placeholder="Nhap username..."
+                   id="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   placeholder="Nhap password..."
+                   id="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm-password">Confirm password:</label>
+            <input type="password"
+                   name="confirm-password"
+                   class="form-control"
+                   placeholder="Nhap confirm password..."
+                   id="confirm-password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm-password">Avatar:</label>
+            <input type="file"
+                   name="avatar"
+                   class="form-control"
+                   id="avatar">
+        </div>
+        <input type="submit" value="DANG KY" class="btn btn-danger" />
+    </form>
+{% endblock %}

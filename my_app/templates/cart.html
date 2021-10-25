@@ -50,7 +50,14 @@
 </div>
 
 <div>
-    <input type="button" value="Thanh toan" class="btn btn-success" />
+    {% if current_user.is_authenticated %}
+    <input type="button"
+           onclick="pay()"
+           value="Thanh toan"
+           class="btn btn-success" />
+    {% else %}
+    <a href="/user-login?next=/cart">Dang nhap de thanh toan</a>
+    {% endif %}
 </div>
 {% endif %}
 
