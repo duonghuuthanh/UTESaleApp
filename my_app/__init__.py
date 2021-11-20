@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin
 from flask_login import LoginManager
 import cloudinary
 
@@ -20,7 +19,5 @@ cloudinary.config(cloud_name=app.config["CLOUDINARY_INFO"]['cloud_name'],
 
 
 db = SQLAlchemy(app=app)
-admin = Admin(app=app, name="UTE SHOP", template_mode="bootstrap4")
 my_login = LoginManager(app=app)
-
 CART_KEY = "cart"

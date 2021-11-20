@@ -2,9 +2,33 @@
 
 {% block body %}
 
+<H1>{{msg}}</H1>
 {% if current_user.is_authenticated %}
 <h1 class="text-danger">WELCOME {{ current_user.name }} TO OUR WEBSITE!!!</h1>
-<p>This is a demo application!!!</p>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <table  class="table">
+            <tr>
+                <th>Ma danh muc</th>
+                <th>Ten danh muc</th>
+                <th>So luong san pham</th>
+            </tr>
+            {% for s in stats %}
+            <tr>
+                <td>{{ s[0] }}</td>
+                <td>{{ s[1] }}</td>
+                <td>{{ s[2] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-xs-12">
+        <canvas id="catStatsId"></canvas>
+    </div>
+</div>
+
+
 {% else %}
     <h1 class="text-center text-danger">DANG NHAP</h1>
     <form action="/login" method="post">
@@ -12,4 +36,44 @@
     </form>
 {% endif %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let labels = [], info = [];
+
+{% for c in stats %}
+    labels.push('{{ c[1] }}')
+    info.push({{ c[2] }})
+{% endfor %}
+
+
+let colors = []
+for (let i = 0; i < labels.length; i++) {
+    let r = parseInt(Math.random() * 255)
+    let g = parseInt(Math.random() * 255)
+    let b = parseInt(Math.random() * 255)
+    colors.push(`rgb(${r}, ${g}, ${b})`)
+}
+
+const data = {
+  labels: labels,
+  datasets: [{
+    label: 'Thong ke san pham theo danh muc',
+    data: info,
+    backgroundColor: colors,
+    hoverOffset: 4
+  }]
+};
+
+const config = {
+  type: 'doughnut',
+  data: data,
+};
+
+window.onload = function() {
+    let ctx = document.getElementById('catStatsId').getContext('2d')
+    new Chart(ctx, config);
+}
+</script>
+
 {% endblock %}
+

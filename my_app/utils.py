@@ -1,6 +1,7 @@
 from my_app.models import Category, Product, Receipt, ReceiptDetails, User
 from my_app import app, db
 from flask_login import current_user
+from sqlalchemy import func
 import hashlib
 
 
@@ -80,3 +81,24 @@ def add_user(name, username, password, avatar=None):
         return True
     except:
         return False
+
+
+def product_stats_by_cate():
+    #[(1, 'Mobile', 4), (2, 'Tablet', 3), (5, 'Smart Watch', 2), (6, 'Desktop', 0)]
+    return db.session.query(Category.id, Category.name, func.count(Product.id))\
+            .join(Product, Product.category_id==Category.id, isouter=True)\
+            .group_by(Category.id, Category.name).all()
+
+
+def product_stats(from_date=None, to_date=None):
+    stats = db.session.query(Product.id, Product.name, func.sum(ReceiptDetails.unit_price*ReceiptDetails.quantity))
+
+    if from_date:
+        stats = stats.filter(Receipt.created_date.__ge__(from_date))
+
+    if to_date:
+        stats = stats.filter(Receipt.created_date.__le__(to_date))
+
+    return stats.join(ReceiptDetails, ReceiptDetails.product_id==Product.id, isouter=True)\
+                .join(Receipt, ReceiptDetails.receipt_id==Receipt.id, isouter=True)\
+                .group_by(Product.id, Product.name).all()
